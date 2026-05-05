@@ -252,6 +252,30 @@
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.requiredMark {
+  color: #ef4444;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.charCounter {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
 }
 
 .input,
@@ -272,9 +296,44 @@
   box-shadow: 0 0 0 3px rgba(12, 100, 227, 0.1);
 }
 
+.input.inputError,
+.textarea.inputError {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.input.inputError:focus,
+.textarea.inputError:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+.fieldError {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #ef4444;
+  line-height: 1.3;
+}
+
 .textarea {
   resize: vertical;
   min-height: 120px;
+}
+
+/* Honeypot — invisible to humans, scraped by bots */
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .submitBtn {
@@ -303,26 +362,64 @@
   cursor: not-allowed;
 }
 
+.spinner {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .statusMsg {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
   border-radius: var(--radius-md);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  border: 1px solid transparent;
+  margin-top: 4px;
+}
+
+.statusIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.statusBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statusBody strong {
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.1px;
+}
+
+.statusBody span {
+  color: inherit;
+  opacity: 0.9;
 }
 
 .statusMsg.success {
   background: rgba(8, 188, 8, 0.1);
   color: var(--brand-green);
-  border: 1px solid rgba(8, 188, 8, 0.2);
+  border-color: rgba(8, 188, 8, 0.25);
+}
+
+.statusMsg.info {
+  background: rgba(12, 100, 227, 0.08);
+  color: var(--brand-blue);
+  border-color: rgba(12, 100, 227, 0.22);
 }
 
 .statusMsg.error {
   background: rgba(220, 38, 38, 0.1);
   color: #ef4444;
-  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.22);
 }
 
 /* FAQ */

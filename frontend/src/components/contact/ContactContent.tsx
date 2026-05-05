@@ -1,35 +1,97 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Mail, MapPin, Clock, ChevronDown, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import { submitContactForm } from '@/lib/api';
+import {
+  MessageCircle, Mail, MapPin, Clock, ChevronDown, Send,
+  CheckCircle, AlertCircle, Info, Loader2,
+} from 'lucide-react';
+import { submitContactForm, type ContactErrorCode, type ContactSuccessCode } from '@/lib/api';
 import { WHATSAPP_URL, CONTACT_EMAIL } from '@/lib/constants';
 import styles from './ContactContent.module.css';
 
+type FormState = { name: string; phone: string; email: string; message: string };
+
+type Status =
+  | { kind: 'idle' }
+  | { kind: 'sending' }
+  | { kind: 'success'; code: ContactSuccessCode }
+  | { kind: 'error'; code: ContactErrorCode };
+
+const MESSAGE_MAX = 2000;
+
+const FIELD_ERROR_KEYS: Record<string, string> = {
+  name_required: 'name_required',
+  phone_invalid: 'phone_invalid',
+  email_invalid: 'email_invalid',
+  message_required: 'message_required',
+};
+
 export default function ContactContent() {
   const t = useTranslations('contact');
-  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
-  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [form, setForm] = useState<FormState>({ name: '', phone: '', email: '', message: '' });
+  const [honeypot, setHoneypot] = useState('');
+  const [status, setStatus] = useState<Status>({ kind: 'idle' });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const statusRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('sending');
-    try {
-      const res = await submitContactForm(form);
-      if (res.success) {
-        setStatus('success');
-        setForm({ name: '', phone: '', email: '', message: '' });
-      } else {
-        setStatus('error');
-      }
-    } catch {
-      setStatus('error');
+  // Scroll status banner into view when it appears (success or error)
+  useEffect(() => {
+    if (status.kind === 'success' || status.kind === 'error') {
+      statusRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    setTimeout(() => setStatus('idle'), 5000);
+  }, [status]);
+
+  // Clear a field's error as the user edits it
+  const updateField = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    if (fieldErrors[key]) {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+    }
+    if (status.kind === 'error' || status.kind === 'success') {
+      setStatus({ kind: 'idle' });
+    }
   };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus({ kind: 'sending' });
+    setFieldErrors({});
+
+    const result = await submitContactForm({ ...form, website: honeypot });
+
+    if (result.ok) {
+      setStatus({ kind: 'success', code: result.code });
+      setForm({ name: '', phone: '', email: '', message: '' });
+      setHoneypot('');
+      return;
+    }
+
+    if (result.code === 'validation' && result.fieldErrors) {
+      const mapped: Record<string, string> = {};
+      for (const [field, code] of Object.entries(result.fieldErrors)) {
+        mapped[field] = FIELD_ERROR_KEYS[code] ?? code;
+      }
+      setFieldErrors(mapped);
+      // Focus first invalid field (preserve tab order)
+      const order: (keyof FormState)[] = ['name', 'phone', 'email', 'message'];
+      const first = order.find((f) => mapped[f]);
+      if (first) {
+        requestAnimationFrame(() => {
+          document.getElementById(`contact-${first}`)?.focus();
+        });
+      }
+    }
+    setStatus({ kind: 'error', code: result.code });
+  };
+
+  const fieldErrorKey = (field: keyof FormState) => fieldErrors[field];
 
   const faqs = [
     { q: t('faq.q1'), a: t('faq.a1') },
@@ -40,7 +102,6 @@ export default function ContactContent() {
 
   return (
     <>
-      {/* Hero */}
       <section className={styles.hero}>
         <div className={styles.heroBg} />
         <div className={`container ${styles.heroContent}`}>
@@ -63,10 +124,8 @@ export default function ContactContent() {
         </div>
       </section>
 
-      {/* Contact Section */}
       <section className="section">
         <div className={`container ${styles.contactGrid}`}>
-          {/* Info Side */}
           <motion.div
             className={styles.infoSide}
             initial={{ opacity: 0, x: -30 }}
@@ -127,69 +186,123 @@ export default function ContactContent() {
             </a>
           </motion.div>
 
-          {/* Form Side */}
           <motion.form
             className={styles.formSide}
             onSubmit={handleSubmit}
+            noValidate
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className={styles.fieldGroup}>
-              <label htmlFor="contact-name">{t('form.name')}</label>
+            {/* Honeypot — hidden from real users, harvested by bots */}
+            <div className={styles.honeypot} aria-hidden="true">
+              <label htmlFor="contact-website">Website</label>
+              <input
+                id="contact-website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
+
+            <Field
+              id="contact-name"
+              label={t('form.name')}
+              required
+              errorKey={fieldErrorKey('name')}
+              t={t}
+            >
               <input
                 id="contact-name"
                 type="text"
-                required
                 value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className={styles.input}
+                onChange={(e) => updateField('name', e.target.value)}
+                aria-invalid={!!fieldErrorKey('name')}
+                aria-required="true"
+                className={`${styles.input} ${fieldErrorKey('name') ? styles.inputError : ''}`}
+                autoComplete="name"
               />
-            </div>
+            </Field>
+
             <div className={styles.fieldRow}>
-              <div className={styles.fieldGroup}>
-                <label htmlFor="contact-phone">{t('form.phone')}</label>
+              <Field
+                id="contact-phone"
+                label={t('form.phone')}
+                required
+                errorKey={fieldErrorKey('phone')}
+                t={t}
+              >
                 <input
                   id="contact-phone"
                   type="tel"
-                  required
                   value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className={styles.input}
+                  onChange={(e) => updateField('phone', e.target.value)}
+                  aria-invalid={!!fieldErrorKey('phone')}
+                  aria-required="true"
+                  className={`${styles.input} ${fieldErrorKey('phone') ? styles.inputError : ''}`}
+                  autoComplete="tel"
+                  inputMode="tel"
                 />
-              </div>
-              <div className={styles.fieldGroup}>
-                <label htmlFor="contact-email">{t('form.email')}</label>
+              </Field>
+
+              <Field
+                id="contact-email"
+                label={t('form.email')}
+                required
+                errorKey={fieldErrorKey('email')}
+                t={t}
+              >
                 <input
                   id="contact-email"
                   type="email"
-                  required
                   value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className={styles.input}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  aria-invalid={!!fieldErrorKey('email')}
+                  aria-required="true"
+                  className={`${styles.input} ${fieldErrorKey('email') ? styles.inputError : ''}`}
+                  autoComplete="email"
+                  inputMode="email"
                 />
-              </div>
+              </Field>
             </div>
-            <div className={styles.fieldGroup}>
-              <label htmlFor="contact-message">{t('form.message')}</label>
+
+            <Field
+              id="contact-message"
+              label={t('form.message')}
+              required
+              errorKey={fieldErrorKey('message')}
+              t={t}
+              hint={
+                <span className={styles.charCounter}>
+                  {form.message.length}/{MESSAGE_MAX}
+                </span>
+              }
+            >
               <textarea
                 id="contact-message"
-                required
                 rows={5}
                 value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                className={styles.textarea}
+                maxLength={MESSAGE_MAX}
+                onChange={(e) => updateField('message', e.target.value)}
+                aria-invalid={!!fieldErrorKey('message')}
+                aria-required="true"
+                className={`${styles.textarea} ${fieldErrorKey('message') ? styles.inputError : ''}`}
               />
-            </div>
+            </Field>
 
             <button
               type="submit"
               className={styles.submitBtn}
-              disabled={status === 'sending'}
+              disabled={status.kind === 'sending'}
             >
-              {status === 'sending' ? (
-                <>{t('form.sending')}</>
+              {status.kind === 'sending' ? (
+                <>
+                  <Loader2 size={16} className={styles.spinner} />
+                  {t('form.sending')}
+                </>
               ) : (
                 <>
                   <Send size={16} />
@@ -198,35 +311,30 @@ export default function ContactContent() {
               )}
             </button>
 
-            <AnimatePresence>
-              {status === 'success' && (
-                <motion.div
-                  className={`${styles.statusMsg} ${styles.success}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <CheckCircle size={16} />
-                  {t('form.success')}
-                </motion.div>
-              )}
-              {status === 'error' && (
-                <motion.div
-                  className={`${styles.statusMsg} ${styles.error}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <AlertCircle size={16} />
-                  {t('form.error')}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <div ref={statusRef}>
+              <AnimatePresence mode="wait">
+                {status.kind === 'success' && (
+                  <StatusBanner
+                    key={`success-${status.code}`}
+                    variant={status.code === 'savedPending' ? 'info' : 'success'}
+                    title={t(`form.status.success.${status.code}.title`)}
+                    body={t(`form.status.success.${status.code}.body`)}
+                  />
+                )}
+                {status.kind === 'error' && (
+                  <StatusBanner
+                    key={`error-${status.code}`}
+                    variant="error"
+                    title={t(`form.status.error.${status.code}.title`)}
+                    body={t(`form.status.error.${status.code}.body`)}
+                  />
+                )}
+              </AnimatePresence>
+            </div>
           </motion.form>
         </div>
       </section>
 
-      {/* FAQ */}
       <section className="section">
         <div className="container">
           <h2 className={styles.faqTitle}>{t('faq.title')}</h2>
@@ -243,6 +351,7 @@ export default function ContactContent() {
                 <button
                   className={styles.faqQuestion}
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  type="button"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown size={18} className={styles.faqChevron} />
@@ -266,5 +375,64 @@ export default function ContactContent() {
         </div>
       </section>
     </>
+  );
+}
+
+interface FieldProps {
+  id: string;
+  label: string;
+  required?: boolean;
+  errorKey?: string;
+  hint?: React.ReactNode;
+  t: ReturnType<typeof useTranslations>;
+  children: React.ReactNode;
+}
+
+function Field({ id, label, required, errorKey, hint, t, children }: FieldProps) {
+  return (
+    <div className={styles.fieldGroup}>
+      <div className={styles.labelRow}>
+        <label htmlFor={id}>
+          {label}
+          {required && <span className={styles.requiredMark} aria-hidden="true">*</span>}
+        </label>
+        {hint}
+      </div>
+      {children}
+      {errorKey && (
+        <span className={styles.fieldError} role="alert">
+          <AlertCircle size={13} />
+          {t(`form.fieldErrors.${errorKey}`)}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function StatusBanner({
+  variant,
+  title,
+  body,
+}: {
+  variant: 'success' | 'info' | 'error';
+  title: string;
+  body: string;
+}) {
+  const Icon = variant === 'success' ? CheckCircle : variant === 'info' ? Info : AlertCircle;
+  return (
+    <motion.div
+      className={`${styles.statusMsg} ${styles[variant]}`}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -6 }}
+      transition={{ duration: 0.25 }}
+      role={variant === 'error' ? 'alert' : 'status'}
+    >
+      <Icon size={20} className={styles.statusIcon} />
+      <div className={styles.statusBody}>
+        <strong>{title}</strong>
+        <span>{body}</span>
+      </div>
+    </motion.div>
   );
 }

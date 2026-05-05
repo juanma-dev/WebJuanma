@@ -44,7 +44,7 @@ export const PROCESS_ICONS = {
 };
 
 export const TECH_STACK = [
-  'React', 'Next.js', 'TypeScript', 'Java', 'Spring Boot',
+  'React', 'Next.js', 'TypeScript', 'Rust', 'Axum',
   'PostgreSQL', 'Docker', 'AWS', 'Node.js', 'Python',
   'Figma', 'Git', 'Linux', 'Nginx', 'MongoDB',
 ];

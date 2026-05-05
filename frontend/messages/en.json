@@ -131,8 +131,38 @@
       "message": "Tell us about your project...",
       "submit": "Send Message",
       "sending": "Sending...",
-      "success": "Message sent successfully! We'll contact you soon.",
-      "error": "There was an error sending. Please try again."
+      "fieldErrors": {
+        "name_required": "Please enter your name.",
+        "phone_invalid": "Invalid phone number. It must be 7 to 20 digits.",
+        "email_invalid": "Invalid email. Check the format (e.g., you@example.com).",
+        "message_required": "Tell us briefly what it's about."
+      },
+      "status": {
+        "success": {
+          "sent": {
+            "title": "Message sent!",
+            "body": "We've received your message and will get back to you within 24 business hours."
+          },
+          "savedPending": {
+            "title": "Message received!",
+            "body": "Your message is saved. If our email is delayed, ping us on WhatsApp and we'll reply right away."
+          }
+        },
+        "error": {
+          "validation": {
+            "title": "Please review the highlighted fields",
+            "body": "Some fields are missing or invalid. Fix the items in red and try again."
+          },
+          "network": {
+            "title": "Couldn't reach the server",
+            "body": "We couldn't connect to the server. Check your internet and retry. If it persists, reach us on WhatsApp."
+          },
+          "server": {
+            "title": "Something went wrong on our side",
+            "body": "We hit a problem processing your message. Try again in a few minutes, or reach us on WhatsApp."
+          }
+        }
+      }
     },
     "info": {
       "whatsapp": "WhatsApp",
@@ -147,7 +177,7 @@
       "q1": "How long does it take to develop a website?",
       "a1": "Depending on complexity, a website can take between 1 and 4 weeks. More complex projects like e-commerce or web applications can take 4 to 8 weeks.",
       "q2": "What technologies do you use?",
-      "a2": "We use the most modern technologies on the market: React, Next.js, Spring Boot, Java, TypeScript, PostgreSQL, Docker, AWS, among others.",
+      "a2": "We use the most modern technologies on the market: React, Next.js, TypeScript, Rust, Axum, PostgreSQL, Docker, AWS, among others.",
       "q3": "Do you offer post-launch maintenance?",
       "a3": "Yes, we offer annual maintenance plans that include updates, monitoring, bug fixes, and ongoing technical support.",
       "q4": "What is your work process?",

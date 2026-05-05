@@ -5,30 +5,53 @@ export interface ContactRequest {
   phone: string;
   email: string;
   message: string;
+  /** Honeypot — must remain empty for real users. */
+  website?: string;
 }
 
-export interface ContactResponse {
+interface RawContactResponse {
   success: boolean;
-  message: string;
+  code?: string;
+  message?: string;
+  fieldErrors?: Record<string, string>;
 }
 
-export async function submitContactForm(data: ContactRequest): Promise<ContactResponse> {
+export type ContactSuccessCode = 'sent' | 'savedPending';
+export type ContactErrorCode = 'validation' | 'network' | 'server';
+
+export type ContactResult =
+  | { ok: true; code: ContactSuccessCode }
+  | { ok: false; code: ContactErrorCode; fieldErrors?: Record<string, string> };
+
+export async function submitContactForm(data: ContactRequest): Promise<ContactResult> {
+  let response: Response;
   try {
-    const response = await fetch(`${API_BASE}/contact`, {
+    response = await fetch(`${API_BASE}/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-
-    return await response.json();
   } catch {
-    // Fallback: open WhatsApp with message
-    const text = `Hola! Soy ${data.name}. ${data.message}. Mi email: ${data.email}, Tel: ${data.phone}`;
-    window.open(`https://wa.me/573150533698?text=${encodeURIComponent(text)}`, '_blank');
-    return { success: true, message: 'Redirected to WhatsApp' };
+    return { ok: false, code: 'network' };
   }
+
+  let body: RawContactResponse | null = null;
+  try {
+    body = (await response.json()) as RawContactResponse;
+  } catch {
+    /* non-JSON body — fall through */
+  }
+
+  if (response.ok && body?.success) {
+    return {
+      ok: true,
+      code: body.code === 'saved_pending_email' ? 'savedPending' : 'sent',
+    };
+  }
+
+  if (response.status === 400 && body?.code === 'validation_error') {
+    return { ok: false, code: 'validation', fieldErrors: body.fieldErrors };
+  }
+
+  return { ok: false, code: 'server' };
 }

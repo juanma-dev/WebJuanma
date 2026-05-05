@@ -131,8 +131,38 @@
       "message": "Cuéntanos sobre tu proyecto...",
       "submit": "Enviar Mensaje",
       "sending": "Enviando...",
-      "success": "¡Mensaje enviado con éxito! Te contactaremos pronto.",
-      "error": "Hubo un error al enviar. Por favor intenta de nuevo."
+      "fieldErrors": {
+        "name_required": "Por favor escribe tu nombre.",
+        "phone_invalid": "Teléfono inválido. Debe tener entre 7 y 20 dígitos.",
+        "email_invalid": "Correo inválido. Verifica el formato (ej: tu@correo.com).",
+        "message_required": "Cuéntanos brevemente de qué se trata."
+      },
+      "status": {
+        "success": {
+          "sent": {
+            "title": "¡Mensaje enviado!",
+            "body": "Recibimos tu mensaje y te contactaremos en menos de 24 horas hábiles."
+          },
+          "savedPending": {
+            "title": "¡Mensaje recibido!",
+            "body": "Tu mensaje quedó guardado. Si nuestro correo tarda, escríbenos por WhatsApp y te respondemos al instante."
+          }
+        },
+        "error": {
+          "validation": {
+            "title": "Revisa los campos marcados",
+            "body": "Hay datos incompletos o con formato inválido. Corrige los campos en rojo y vuelve a intentar."
+          },
+          "network": {
+            "title": "Sin conexión con el servidor",
+            "body": "No pudimos llegar al servidor. Revisa tu internet y reintenta. Si persiste, escríbenos por WhatsApp."
+          },
+          "server": {
+            "title": "Algo salió mal de nuestro lado",
+            "body": "Tuvimos un problema procesando tu mensaje. Inténtalo de nuevo en unos minutos o contáctanos por WhatsApp."
+          }
+        }
+      }
     },
     "info": {
       "whatsapp": "WhatsApp",
@@ -147,7 +177,7 @@
       "q1": "¿Cuánto tiempo toma desarrollar un sitio web?",
       "a1": "Dependiendo de la complejidad, un sitio web puede tomar entre 1 y 4 semanas. Proyectos más complejos como e-commerce o aplicaciones web pueden tomar de 4 a 8 semanas.",
       "q2": "¿Qué tecnologías utilizan?",
-      "a2": "Utilizamos las tecnologías más modernas del mercado: React, Next.js, Spring Boot, Java, TypeScript, PostgreSQL, Docker, AWS, entre otras.",
+      "a2": "Utilizamos las tecnologías más modernas del mercado: React, Next.js, TypeScript, Rust, Axum, PostgreSQL, Docker, AWS, entre otras.",
       "q3": "¿Ofrecen mantenimiento post-lanzamiento?",
       "a3": "Sí, ofrecemos planes de mantenimiento anual que incluyen actualizaciones, monitoreo, corrección de errores y soporte técnico continuo.",
       "q4": "¿Cómo es el proceso de trabajo?",

@@ -9,14 +9,19 @@ frontend/build/
 frontend/next-env.d.ts
 frontend/*.tsbuildinfo
 
+# Rust
+backend/target/
+*.pdb
+backend/.env
+
+# SQLite (local dev DB)
+backend/*.db
+backend/*.db-shm
+backend/*.db-wal
+
 # Build outputs
 dist/
 build/
-target/
-*.exe
-*.dll
-*.so
-*.dylib
 
 # Debug logs
 npm-debug.log*
@@ -30,7 +35,6 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-*.env
 
 # Operating System files
 .DS_Store
@@ -51,15 +55,6 @@ desktop.ini
 *.sublime-project
 *.sublime-workspace
 
-# Java/Spring Boot (if applicable)
-.gradle/
-.mvn/
-bin/
-*.class
-*.jar
-*.war
-*.ear
-
 # Logs
 logs/
 *.log
@@ -68,11 +63,3 @@ logs/
 tmp/
 temp/
 .temp/
-
-# Gemini/Antigravity specific
-.gemini/
-.antigravity/
-knowledge/
-brain/
-artifacts/
-scratch/
