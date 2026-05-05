@@ -1,0 +1,111 @@
+/* Clockwise spinning border animation */
+@keyframes spinBorder {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.section {
+  padding-bottom: 0;
+}
+
+.card {
+  position: relative;
+  text-align: center;
+  padding: var(--space-5xl) var(--space-2xl);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  border: none;
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+/* Rotating conic-gradient layer — spins clockwise */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  animation: spinBorder 3.5s linear infinite;
+  z-index: 0;
+}
+
+/* Inner mask so only the 2px border ring is visible */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-xl) - 2px);
+  background: var(--bg-secondary);
+  z-index: 1;
+}
+
+/* All direct children sit above the pseudo-elements */
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.bgGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(12, 100, 227, 0.06), transparent 60%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.03em;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 550px;
+  margin: 0 auto var(--space-2xl);
+  line-height: 1.7;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 36px;
+  border-radius: var(--radius-full);
+  background: var(--brand-green);
+  color: var(--bg-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  box-shadow: 0 0 30px rgba(8, 188, 8, 0.2);
+}
+
+.button:hover {
+  background: var(--brand-green-light);
+  transform: translateY(-2px);
+  box-shadow: 0 0 50px rgba(8, 188, 8, 0.3);
+}

@@ -1,0 +1,39 @@
+.wrapper {
+  margin-bottom: var(--space-3xl);
+}
+
+.centered {
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  letter-spacing: -0.03em;
+}
+
+.gradientTitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  margin-bottom: var(--space-md);
+  letter-spacing: -0.03em;
+  background: var(--gradient-brand-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+.centered .subtitle {
+  margin: 0 auto;
+}

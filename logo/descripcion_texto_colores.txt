@@ -1,0 +1,6 @@
+Texto: {wJ}
+    Tipo de Fuente: Consolas (en Windows)
+Colores:
+    {}: #e3810c
+    w:  #0c64e3
+    J:  #08bc08

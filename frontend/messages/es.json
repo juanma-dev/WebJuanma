@@ -1,0 +1,182 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Nosotros",
+    "services": "Servicios",
+    "contact": "Contacto",
+    "cta": "Agendar Cita"
+  },
+  "hero": {
+    "title1": "Desarrollo & Diseño",
+    "title2": "Web Profesional",
+    "subtitle": "Transformamos ideas en experiencias digitales excepcionales. Más de 5 años creando soluciones web que impulsan negocios al siguiente nivel.",
+    "cta1": "Agendar Cita",
+    "cta2": "Ver Servicios",
+    "badge": "+5 Años de Experiencia"
+  },
+  "services": {
+    "title": "Nuestros Servicios",
+    "subtitle": "Soluciones digitales integrales diseñadas para potenciar tu negocio con tecnología de vanguardia.",
+    "cta": "Comenzar Proyecto",
+    "from": "Desde",
+    "perYear": "/año",
+    "items": {
+      "webDesign": {
+        "name": "Diseño Web",
+        "description": "Sitios web personalizados y responsivos que se adaptan a cualquier dispositivo, proporcionando una experiencia de usuario óptima.",
+        "priceCOP": "$300.000 COP",
+        "priceUSD": "$70 USD"
+      },
+      "graphicDesign": {
+        "name": "Diseño Gráfico",
+        "description": "Elementos visuales impactantes y profesionales que comunican efectivamente tu mensaje y refuerzan la identidad de tu marca.",
+        "priceCOP": "$200.000 COP",
+        "priceUSD": "$50 USD"
+      },
+      "blogs": {
+        "name": "Desarrollo de Blogs",
+        "description": "Plataformas de blogs dinámicas y fáciles de gestionar para compartir contenido de manera efectiva y optimizadas para SEO.",
+        "priceCOP": "$300.000 COP",
+        "priceUSD": "$70 USD"
+      },
+      "ecommerce": {
+        "name": "E-Commerce",
+        "description": "Tiendas en línea seguras y optimizadas para maximizar las ventas y mejorar la experiencia de compra de los usuarios.",
+        "priceCOP": "$300.000 COP",
+        "priceUSD": "$70 USD"
+      },
+      "seo": {
+        "name": "Optimización SEO",
+        "description": "Estrategias de optimización en motores de búsqueda para mejorar la visibilidad y el posicionamiento de tu sitio web.",
+        "priceCOP": "$200.000 COP",
+        "priceUSD": "$50 USD"
+      },
+      "maintenance": {
+        "name": "Mantenimiento Web",
+        "description": "Servicios continuos de mantenimiento y soporte para asegurar que tu sitio web funcione sin problemas y esté siempre actualizado.",
+        "priceCOP": "$150.000 COP",
+        "priceUSD": "$35 USD",
+        "isPerYear": true
+      },
+      "analytics": {
+        "name": "Análisis y Monitoreo",
+        "description": "Herramientas y servicios para analizar el rendimiento de tu sitio web y tomar decisiones informadas para su mejora continua.",
+        "priceCOP": "$250.000 COP",
+        "priceUSD": "$60 USD"
+      },
+      "webApps": {
+        "name": "Aplicaciones Web",
+        "description": "Aplicaciones web dinámicas y robustas que funcionan en cualquier navegador, brindando experiencias interactivas y personalizadas.",
+        "priceCOP": "$700.000 COP",
+        "priceUSD": "$170 USD"
+      },
+      "mobileApps": {
+        "name": "Apps Móviles",
+        "description": "Diseño y desarrollo de aplicaciones móviles nativas y multiplataforma para iOS y Android con interfaces modernas e intuitivas.",
+        "priceCOP": "$900.000 COP",
+        "priceUSD": "$220 USD"
+      },
+      "desktopApps": {
+        "name": "Apps de Escritorio",
+        "description": "Aplicaciones de escritorio robustas y multiplataforma para Windows, macOS y Linux adaptadas a las necesidades de tu negocio.",
+        "priceCOP": "$800.000 COP",
+        "priceUSD": "$195 USD"
+      }
+    }
+  },
+  "about": {
+    "title": "Sobre Nosotros",
+    "subtitle": "Conoce al equipo detrás de tus soluciones digitales",
+    "description": "En WebJuanma nos especializamos en el desarrollo y diseño de aplicaciones y páginas web que no solo cumplen con los estándares actuales, sino que también destacan por su innovación y creatividad.",
+    "whyTitle": "¿Por qué elegirnos?",
+    "whySubtitle": "Cuando visitas nuestro sitio por primera vez, entendemos que somos un desconocido. Por eso nos comprometemos a demostrarte nuestra experiencia y dedicación en cada proyecto.",
+    "experience": {
+      "title": "Experiencia & Profesionalismo",
+      "description": "Equipo de expertos con más de 5 años de experiencia en el sector, listos para convertir tus ideas en realidad."
+    },
+    "custom": {
+      "title": "Soluciones Personalizadas",
+      "description": "Cada negocio es único. Nuestras soluciones están diseñadas para adaptarse a tus necesidades específicas."
+    },
+    "innovation": {
+      "title": "Innovación & Creatividad",
+      "description": "A la vanguardia de las tendencias tecnológicas para ofrecerte productos innovadores que destacan en el mercado."
+    },
+    "support": {
+      "title": "Soporte Continuo",
+      "description": "Nos preocupamos por tu éxito a largo plazo. Ofrecemos soporte continuo para que todo funcione perfectamente."
+    },
+    "mission": {
+      "title": "Misión",
+      "description": "Diseñar y desarrollar aplicaciones y páginas web innovadoras y efectivas que impulsan el éxito de nuestros clientes. Nos comprometemos a proporcionar soluciones personalizadas que satisfacen las necesidades específicas de cada negocio."
+    },
+    "vision": {
+      "title": "Visión",
+      "description": "Ser líderes en el sector del desarrollo y diseño web, reconocidos por nuestra creatividad, innovación y excelencia. Aspiramos a transformar ideas en realidades digitales que superen las expectativas."
+    },
+    "values": {
+      "title": "Valores",
+      "items": ["Innovación", "Calidad", "Compromiso", "Personalización", "Integridad"]
+    },
+    "ctaText": "¿Listo para impulsar tu negocio?",
+    "ctaButton": "Hablemos"
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "Somos optimistas y nos encanta trabajar en equipo. Cuéntanos sobre tu proyecto.",
+    "form": {
+      "name": "Nombre completo",
+      "phone": "Celular",
+      "email": "Correo electrónico",
+      "message": "Cuéntanos sobre tu proyecto...",
+      "submit": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "success": "¡Mensaje enviado con éxito! Te contactaremos pronto.",
+      "error": "Hubo un error al enviar. Por favor intenta de nuevo."
+    },
+    "info": {
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "location": "Ubicación",
+      "locationValue": "Colombia",
+      "schedule": "Horario",
+      "scheduleValue": "Lun - Vie: 8:00 AM - 6:00 PM"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": "¿Cuánto tiempo toma desarrollar un sitio web?",
+      "a1": "Dependiendo de la complejidad, un sitio web puede tomar entre 1 y 4 semanas. Proyectos más complejos como e-commerce o aplicaciones web pueden tomar de 4 a 8 semanas.",
+      "q2": "¿Qué tecnologías utilizan?",
+      "a2": "Utilizamos las tecnologías más modernas del mercado: React, Next.js, Spring Boot, Java, TypeScript, PostgreSQL, Docker, AWS, entre otras.",
+      "q3": "¿Ofrecen mantenimiento post-lanzamiento?",
+      "a3": "Sí, ofrecemos planes de mantenimiento anual que incluyen actualizaciones, monitoreo, corrección de errores y soporte técnico continuo.",
+      "q4": "¿Cómo es el proceso de trabajo?",
+      "a4": "Nuestro proceso incluye: consulta inicial, diseño de propuesta, desarrollo iterativo con revisiones, pruebas de calidad y entrega final con soporte."
+    }
+  },
+  "process": {
+    "title": "Nuestro Proceso",
+    "subtitle": "Un enfoque estructurado para garantizar resultados excepcionales",
+    "steps": {
+      "consult": { "title": "Consulta", "description": "Entendemos tus necesidades y objetivos de negocio" },
+      "design": { "title": "Diseño", "description": "Creamos prototipos y diseños a medida" },
+      "develop": { "title": "Desarrollo", "description": "Construimos tu solución con tecnología moderna" },
+      "test": { "title": "Pruebas", "description": "Testing exhaustivo de calidad y rendimiento" },
+      "launch": { "title": "Entrega", "description": "Lanzamiento y configuración en producción" },
+      "support": { "title": "Soporte", "description": "Mantenimiento y mejoras continuas" }
+    }
+  },
+  "cta": {
+    "title": "¿Tienes un proyecto en mente?",
+    "subtitle": "Ya sea que tengas curiosidad sobre nuestros servicios, cómo crear tu sitio web o incluso sobre diseño gráfico, estamos aquí para responder todas tus preguntas.",
+    "button": "Hablemos"
+  },
+  "footer": {
+    "description": "Tu socio confiable en desarrollo y diseño web. Creamos experiencias digitales únicas que impulsan tu negocio.",
+    "quickLinks": "Enlaces",
+    "services": "Servicios",
+    "contact": "Contacto",
+    "rights": "Todos los derechos reservados.",
+    "madeBy": "Creado por"
+  }
+}

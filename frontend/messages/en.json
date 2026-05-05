@@ -1,0 +1,182 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "cta": "Book a Call"
+  },
+  "hero": {
+    "title1": "Professional",
+    "title2": "Web Development & Design",
+    "subtitle": "We transform ideas into exceptional digital experiences. Over 5 years creating web solutions that take businesses to the next level.",
+    "cta1": "Book a Call",
+    "cta2": "View Services",
+    "badge": "+5 Years of Experience"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Comprehensive digital solutions designed to power your business with cutting-edge technology.",
+    "cta": "Start Project",
+    "from": "From",
+    "perYear": "/year",
+    "items": {
+      "webDesign": {
+        "name": "Web Design",
+        "description": "Custom, responsive websites that adapt to any device, providing an optimal user experience.",
+        "priceCOP": "$300,000 COP",
+        "priceUSD": "$70 USD"
+      },
+      "graphicDesign": {
+        "name": "Graphic Design",
+        "description": "Impactful, professional visual elements that effectively communicate your message and reinforce your brand identity.",
+        "priceCOP": "$200,000 COP",
+        "priceUSD": "$50 USD"
+      },
+      "blogs": {
+        "name": "Blog Development",
+        "description": "Dynamic, easy-to-manage blog platforms to share content effectively, optimized for SEO.",
+        "priceCOP": "$300,000 COP",
+        "priceUSD": "$70 USD"
+      },
+      "ecommerce": {
+        "name": "E-Commerce",
+        "description": "Secure, optimized online stores to maximize sales and improve the shopping experience for users.",
+        "priceCOP": "$300,000 COP",
+        "priceUSD": "$70 USD"
+      },
+      "seo": {
+        "name": "SEO Optimization",
+        "description": "Search engine optimization strategies to improve visibility and ranking of your website.",
+        "priceCOP": "$200,000 COP",
+        "priceUSD": "$50 USD"
+      },
+      "maintenance": {
+        "name": "Web Maintenance",
+        "description": "Ongoing maintenance and support services to ensure your website runs smoothly and stays up to date.",
+        "priceCOP": "$150,000 COP",
+        "priceUSD": "$35 USD",
+        "isPerYear": true
+      },
+      "analytics": {
+        "name": "Analytics & Monitoring",
+        "description": "Tools and services to analyze your website's performance and make informed decisions for continuous improvement.",
+        "priceCOP": "$250,000 COP",
+        "priceUSD": "$60 USD"
+      },
+      "webApps": {
+        "name": "Web Applications",
+        "description": "Dynamic, robust web applications that work on any browser, delivering interactive and personalized experiences.",
+        "priceCOP": "$700,000 COP",
+        "priceUSD": "$170 USD"
+      },
+      "mobileApps": {
+        "name": "Mobile Apps",
+        "description": "Design and development of native and cross-platform mobile applications for iOS and Android with modern, intuitive interfaces.",
+        "priceCOP": "$900,000 COP",
+        "priceUSD": "$220 USD"
+      },
+      "desktopApps": {
+        "name": "Desktop Apps",
+        "description": "Robust, cross-platform desktop applications for Windows, macOS, and Linux tailored to your business needs.",
+        "priceCOP": "$800,000 COP",
+        "priceUSD": "$195 USD"
+      }
+    }
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Meet the team behind your digital solutions",
+    "description": "At WebJuanma, we specialize in developing and designing applications and websites that not only meet current standards but also stand out for their innovation and creativity.",
+    "whyTitle": "Why Choose Us?",
+    "whySubtitle": "When you visit our site for the first time, we understand we're a stranger to you. That's why we commit to demonstrating our experience and dedication in every project.",
+    "experience": {
+      "title": "Experience & Professionalism",
+      "description": "Team of experts with over 5 years of experience in the industry, ready to turn your ideas into reality."
+    },
+    "custom": {
+      "title": "Custom Solutions",
+      "description": "Every business is unique. Our solutions are designed to adapt to your specific needs."
+    },
+    "innovation": {
+      "title": "Innovation & Creativity",
+      "description": "At the forefront of technological trends to offer you innovative products that stand out in the market."
+    },
+    "support": {
+      "title": "Ongoing Support",
+      "description": "We care about your long-term success. We offer continuous support to keep everything running perfectly."
+    },
+    "mission": {
+      "title": "Mission",
+      "description": "To design and develop innovative and effective applications and websites that drive our clients' success. We commit to providing customized solutions that meet the specific needs of each business."
+    },
+    "vision": {
+      "title": "Vision",
+      "description": "To be leaders in web development and design, recognized for our creativity, innovation, and excellence. We aspire to transform ideas into digital realities that exceed expectations."
+    },
+    "values": {
+      "title": "Values",
+      "items": ["Innovation", "Quality", "Commitment", "Customization", "Integrity"]
+    },
+    "ctaText": "Ready to boost your business?",
+    "ctaButton": "Let's Talk"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're optimistic and love working in teams. Tell us about your project.",
+    "form": {
+      "name": "Full name",
+      "phone": "Phone number",
+      "email": "Email address",
+      "message": "Tell us about your project...",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully! We'll contact you soon.",
+      "error": "There was an error sending. Please try again."
+    },
+    "info": {
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "location": "Location",
+      "locationValue": "Colombia",
+      "schedule": "Schedule",
+      "scheduleValue": "Mon - Fri: 8:00 AM - 6:00 PM"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "How long does it take to develop a website?",
+      "a1": "Depending on complexity, a website can take between 1 and 4 weeks. More complex projects like e-commerce or web applications can take 4 to 8 weeks.",
+      "q2": "What technologies do you use?",
+      "a2": "We use the most modern technologies on the market: React, Next.js, Spring Boot, Java, TypeScript, PostgreSQL, Docker, AWS, among others.",
+      "q3": "Do you offer post-launch maintenance?",
+      "a3": "Yes, we offer annual maintenance plans that include updates, monitoring, bug fixes, and ongoing technical support.",
+      "q4": "What is your work process?",
+      "a4": "Our process includes: initial consultation, proposal design, iterative development with reviews, quality testing, and final delivery with support."
+    }
+  },
+  "process": {
+    "title": "Our Process",
+    "subtitle": "A structured approach to ensure exceptional results",
+    "steps": {
+      "consult": { "title": "Consult", "description": "We understand your needs and business goals" },
+      "design": { "title": "Design", "description": "We create custom prototypes and designs" },
+      "develop": { "title": "Develop", "description": "We build your solution with modern technology" },
+      "test": { "title": "Testing", "description": "Exhaustive quality and performance testing" },
+      "launch": { "title": "Delivery", "description": "Launch and production configuration" },
+      "support": { "title": "Support", "description": "Ongoing maintenance and improvements" }
+    }
+  },
+  "cta": {
+    "title": "Have a project in mind?",
+    "subtitle": "Whether you're curious about our services, how to build your website, or even about graphic design, we're here to answer all your questions.",
+    "button": "Let's Talk"
+  },
+  "footer": {
+    "description": "Your trusted partner in web development and design. We create unique digital experiences that drive your business.",
+    "quickLinks": "Links",
+    "services": "Services",
+    "contact": "Contact",
+    "rights": "All rights reserved.",
+    "madeBy": "Created by"
+  }
+}

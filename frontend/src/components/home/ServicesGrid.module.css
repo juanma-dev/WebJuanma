@@ -1,0 +1,140 @@
+/* Clockwise spinning border animation */
+@keyframes spinBorder {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.section {
+  padding-top: var(--space-4xl);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.card {
+  position: relative;
+  padding: var(--space-2xl) var(--space-xl);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: none;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  cursor: default;
+}
+
+/* Rotating conic-gradient layer — spins clockwise */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  animation: spinBorder 3.5s linear infinite;
+  z-index: 0;
+}
+
+/* Inner mask — makes only the 2px border ring visible */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-lg) - 2px);
+  background: var(--bg-secondary);
+  transition: background var(--transition-base);
+  z-index: 1;
+}
+
+/* All direct children sit above the pseudo-elements */
+.card > * {
+  position: relative;
+  z-index: 2;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.card:hover .glowEffect {
+  opacity: 1;
+}
+
+/* Color Variants */
+.card.orange .iconWrapper { background: rgba(227, 129, 12, 0.1); color: var(--brand-orange); }
+.card.orange:hover { box-shadow: var(--glow-orange); }
+
+.card.blue .iconWrapper { background: rgba(12, 100, 227, 0.1); color: var(--brand-blue); }
+.card.blue:hover { box-shadow: var(--glow-blue); }
+
+.card.green .iconWrapper { background: rgba(8, 188, 8, 0.1); color: var(--brand-green); }
+.card.green:hover { box-shadow: var(--glow-green); }
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.cardDesc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.glowEffect {
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.orange .glowEffect { background: rgba(227, 129, 12, 0.06); }
+.blue .glowEffect { background: rgba(12, 100, 227, 0.06); }
+.green .glowEffect { background: rgba(8, 188, 8, 0.06); }
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .grid { grid-template-columns: 1fr; }
+}

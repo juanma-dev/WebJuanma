@@ -1,0 +1,176 @@
+/* Clockwise spinning border animation */
+@keyframes spinBorder {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.section {
+  overflow: hidden;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4xl);
+  align-items: center;
+}
+
+/* Text Side */
+.textSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--brand-blue);
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+
+.description {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--brand-blue);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  margin-top: var(--space-sm);
+}
+
+.link:hover {
+  gap: 14px;
+  color: var(--brand-blue-light);
+}
+
+/* Visual Side */
+.visualSide {
+  display: flex;
+  justify-content: center;
+}
+
+.visualGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 400px;
+}
+
+.visualCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-lg);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: none;
+  transition: all var(--transition-base);
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Rotating conic-gradient layer — spins clockwise */
+.visualCard::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  animation: spinBorder 3.5s linear infinite;
+  z-index: 0;
+}
+
+/* Inner mask so only the 2px border ring is visible */
+.visualCard::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-lg) - 2px);
+  background: var(--bg-secondary);
+  transition: background var(--transition-base);
+  z-index: 1;
+}
+
+/* All direct children sit above the pseudo-elements */
+.visualCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.visualCard:hover {
+  transform: translateY(-4px);
+}
+
+.visualCard:hover::before {
+  opacity: 1;
+}
+
+.visualCard:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.v1:hover { box-shadow: var(--glow-orange); }
+.v2:hover { box-shadow: var(--glow-blue); }
+.v3:hover { box-shadow: var(--glow-green); }
+.v4:hover { box-shadow: var(--glow-orange); }
+
+.vNumber {
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  background: var(--gradient-brand-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.vLabel {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  .visualGrid {
+    max-width: 100%;
+  }
+}

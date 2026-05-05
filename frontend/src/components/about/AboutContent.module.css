@@ -1,0 +1,292 @@
+/* Clockwise spinning border animation */
+@keyframes spinBorder {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  padding-top: calc(var(--navbar-height) + var(--space-5xl));
+  padding-bottom: var(--space-4xl);
+  text-align: center;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top center, rgba(12, 100, 227, 0.06) 0%, transparent 60%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--brand-blue);
+  margin-bottom: var(--space-lg);
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  background: var(--gradient-brand-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: var(--space-lg);
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  line-height: 1.7;
+}
+
+/* Story */
+.storyBlock {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.storyText {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  border-left: 3px solid var(--brand-blue);
+  padding-left: var(--space-xl);
+  text-align: left;
+}
+
+/* Why Choose Us */
+.whyGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+}
+
+.whyCard {
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: none;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rotating conic-gradient layer — spins clockwise */
+.whyCard::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  animation: spinBorder 3.5s linear infinite;
+  z-index: 0;
+}
+
+/* Inner mask so only the 2px border ring is visible */
+.whyCard::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-lg) - 2px);
+  background: var(--bg-secondary);
+  transition: background var(--transition-base);
+  z-index: 1;
+}
+
+/* All direct children sit above the pseudo-elements */
+.whyCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.whyCard:hover::before {
+  opacity: 1;
+}
+
+.whyCard:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.whyCard.orange .whyIcon { background: rgba(227, 129, 12, 0.1); color: var(--brand-orange); }
+.whyCard.blue .whyIcon { background: rgba(12, 100, 227, 0.1); color: var(--brand-blue); }
+.whyCard.green .whyIcon { background: rgba(8, 188, 8, 0.1); color: var(--brand-green); }
+
+.whyCard.orange:hover { box-shadow: var(--glow-orange); }
+.whyCard.blue:hover { box-shadow: var(--glow-blue); }
+.whyCard.green:hover { box-shadow: var(--glow-green); }
+
+.whyIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.whyCard h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.whyCard p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Mission / Vision / Values */
+.mvvGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.mvvCard {
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: none;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Rotating conic-gradient layer — spins clockwise */
+.mvvCard::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  animation: spinBorder 3.5s linear infinite;
+  z-index: 0;
+}
+
+/* Inner mask so only the 2px border ring is visible */
+.mvvCard::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-lg) - 2px);
+  background: var(--bg-secondary);
+  transition: background var(--transition-base);
+  z-index: 1;
+}
+
+/* All direct children sit above the pseudo-elements */
+.mvvCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.mvvCard:hover::before {
+  opacity: 1;
+}
+
+.mvvCard:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.mvvCard.orange:hover { box-shadow: var(--glow-orange); }
+.mvvCard.blue:hover { box-shadow: var(--glow-blue); }
+.mvvCard.green:hover { box-shadow: var(--glow-green); }
+
+.mvvIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.mvvCard.orange .mvvIcon { background: rgba(227, 129, 12, 0.1); color: var(--brand-orange); }
+.mvvCard.blue .mvvIcon { background: rgba(12, 100, 227, 0.1); color: var(--brand-blue); }
+.mvvCard.green .mvvIcon { background: rgba(8, 188, 8, 0.1); color: var(--brand-green); }
+
+.mvvCard h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.mvvCard p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+/* Values */
+.valuesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.valueItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.valueItem svg {
+  color: var(--brand-green);
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .whyGrid { grid-template-columns: repeat(2, 1fr); }
+  .mvvGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .whyGrid { grid-template-columns: 1fr; }
+}

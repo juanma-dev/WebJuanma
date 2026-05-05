@@ -1,0 +1,298 @@
+/* Clockwise spinning border animation */
+@keyframes spinBorder {
+  0%   { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  padding-top: calc(var(--navbar-height) + var(--space-5xl));
+  padding-bottom: var(--space-4xl);
+  text-align: center;
+  overflow: hidden;
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top center, rgba(227, 129, 12, 0.06) 0%, transparent 60%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  background: var(--gradient-brand-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: var(--space-lg);
+}
+
+.heroSubtitle {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  max-width: 550px;
+  line-height: 1.7;
+}
+
+/* Services Grid */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl);
+}
+
+.serviceCard {
+  position: relative;
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+  background: transparent;
+  border: none;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Rotating conic-gradient layer — spins clockwise */
+.serviceCard::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background: conic-gradient(
+    from 0deg,
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  animation: spinBorder 3.5s linear infinite;
+  z-index: 0;
+}
+
+/* Inner mask so only the 2px border ring is visible */
+.serviceCard::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-lg) - 2px);
+  background: var(--bg-secondary);
+  transition: background var(--transition-base);
+  z-index: 1;
+}
+
+/* All direct children sit above the pseudo-elements */
+.serviceCard > * {
+  position: relative;
+  z-index: 2;
+}
+
+.serviceCard:hover::before {
+  opacity: 1;
+}
+
+.serviceCard:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.serviceCard:hover .glowEffect { opacity: 1; }
+
+.serviceCard.orange:hover { box-shadow: var(--glow-orange); }
+.serviceCard.blue:hover { box-shadow: var(--glow-blue); }
+.serviceCard.green:hover { box-shadow: var(--glow-green); }
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.serviceCard.orange .iconWrapper { background: rgba(227, 129, 12, 0.1); color: var(--brand-orange); }
+.serviceCard.blue .iconWrapper { background: rgba(12, 100, 227, 0.1); color: var(--brand-blue); }
+.serviceCard.green .iconWrapper { background: rgba(8, 188, 8, 0.1); color: var(--brand-green); }
+
+.serviceName {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.serviceDesc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.from {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priceCOP {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.priceUSD {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.perYear {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.serviceBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.serviceBtn:hover {
+  background: var(--bg-glass-hover);
+  gap: 14px;
+}
+
+.glowEffect {
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.orange .glowEffect { background: rgba(227, 129, 12, 0.06); }
+.blue .glowEffect { background: rgba(12, 100, 227, 0.06); }
+.green .glowEffect { background: rgba(8, 188, 8, 0.06); }
+
+/* Process */
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-lg);
+}
+
+.processStep {
+  position: relative;
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.processNumber {
+  font-size: 0.7rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin-bottom: var(--space-md);
+}
+
+.processIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--brand-blue);
+  margin-bottom: var(--space-md);
+}
+
+.processStep h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.processStep p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.processLine {
+  position: absolute;
+  top: 50%;
+  right: -50%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, var(--border-subtle), transparent);
+  z-index: -1;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .processGrid { grid-template-columns: repeat(3, 1fr); }
+  .processLine { display: none; }
+}
+
+@media (max-width: 768px) {
+  .servicesGrid { grid-template-columns: 1fr; }
+  .processGrid { grid-template-columns: repeat(2, 1fr); }
+}

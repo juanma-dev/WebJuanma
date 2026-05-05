@@ -1,0 +1,135 @@
+.card {
+  position: relative;
+  padding: var(--space-2xl);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  cursor: default;
+  isolation: isolate;
+}
+
+/* Animated gradient border */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    var(--brand-orange),
+    var(--brand-blue),
+    var(--brand-green),
+    var(--brand-orange)
+  );
+  z-index: -2;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  animation: borderRotate 3.5s linear infinite;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--bg-secondary);
+  z-index: -1;
+  transition: background var(--transition-base);
+}
+
+.card:hover {
+  border-color: transparent;
+  background: var(--bg-tertiary);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover::after {
+  background: var(--bg-tertiary);
+}
+
+.card:hover .glowEffect {
+  opacity: 1;
+}
+
+/* Color Variants */
+.card.orange .iconWrapper {
+  background: rgba(227, 129, 12, 0.1);
+  color: var(--brand-orange);
+}
+.card.orange:hover {
+  box-shadow: var(--glow-orange);
+  border-color: rgba(227, 129, 12, 0.2);
+}
+
+.card.blue .iconWrapper {
+  background: rgba(12, 100, 227, 0.1);
+  color: var(--brand-blue);
+}
+.card.blue:hover {
+  box-shadow: var(--glow-blue);
+  border-color: rgba(12, 100, 227, 0.2);
+}
+
+.card.green .iconWrapper {
+  background: rgba(8, 188, 8, 0.1);
+  color: var(--brand-green);
+}
+.card.green:hover {
+  box-shadow: var(--glow-green);
+  border-color: rgba(8, 188, 8, 0.2);
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  transition: all var(--transition-base);
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.description {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Glow Effect */
+.glowEffect {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  pointer-events: none;
+}
+
+.orange .glowEffect {
+  background: rgba(227, 129, 12, 0.08);
+}
+
+.blue .glowEffect {
+  background: rgba(12, 100, 227, 0.08);
+}
+
+.green .glowEffect {
+  background: rgba(8, 188, 8, 0.08);
+}
