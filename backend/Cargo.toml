@@ -1,0 +1,39 @@
+[package]
+name = "webjuanma-api"
+version = "0.1.0"
+edition = "2021"
+description = "WebJuanma API — Contact form backend"
+authors = ["Juan Ma"]
+
+[dependencies]
+# Web framework
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+tower = { version = "0.5", features = ["limit", "timeout"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Email
+lettre = { version = "0.11", features = ["tokio1-native-tls", "smtp-transport", "builder"] }
+
+# Database (SQLite, bundled — no system libsqlite3 required)
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite", "macros", "migrate"] }
+uuid = { version = "1", features = ["v4"] }
+
+# Config & logging
+dotenvy = "0.15"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Validation
+validator = { version = "0.19", features = ["derive"] }
+
+[profile.release]
+opt-level = "z"     # Optimize for size
+lto = true           # Link-Time Optimization
+strip = true         # Strip debug symbols
+codegen-units = 1    # Single codegen unit for better optimization
+panic = "abort"      # Abort on panic (smaller binary)
