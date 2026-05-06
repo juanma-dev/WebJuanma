@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 # ---- Stage 1: build ----
-FROM rust:1.83-slim-bookworm AS builder
+FROM rust:1.85-slim-bookworm AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         pkg-config libssl-dev build-essential \
