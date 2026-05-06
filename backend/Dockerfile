@@ -1,4 +1,6 @@
-# ---- Stage 1: Build ----
+# syntax=docker/dockerfile:1.7
+
+# ---- Stage 1: build ----
 FROM rust:1.83-slim-bookworm AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -18,18 +20,23 @@ COPY src ./src
 COPY migrations ./migrations
 RUN touch src/main.rs && cargo build --release
 
-# ---- Stage 2: Runtime ----
+# ---- Stage 2: runtime ----
 FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates libssl3 \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /app/data
+    && groupadd --system --gid 1000 webjuanma \
+    && useradd  --system --uid 1000 --gid webjuanma --create-home webjuanma \
+    && mkdir -p /app/data \
+    && chown -R webjuanma:webjuanma /app
 
 WORKDIR /app
-COPY --from=builder /app/target/release/webjuanma-api .
+COPY --from=builder --chown=webjuanma:webjuanma /app/target/release/webjuanma-api .
 
+USER webjuanma
 EXPOSE 8080
+
 ENV RUST_LOG=webjuanma_api=info,tower_http=info,sqlx=warn \
     DATABASE_URL=sqlite:///app/data/webjuanma.db
 

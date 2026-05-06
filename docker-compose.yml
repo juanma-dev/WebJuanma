@@ -1,25 +1,66 @@
-services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080/api
+name: webjuanma
 
+# ============================================================
+# Production stack — see compose.env.example for required vars.
+# Bring it up on the server with:
+#   docker compose --profile tunnel up -d
+#
+# Variables read from a .env file next to this file (see compose.env.example).
+# Backend secrets (SMTP_USER, SMTP_PASS, ...) live in a separate file
+# referenced by BACKEND_ENV_FILE — they never enter the image.
+# ============================================================
+
+services:
   backend:
+    image: ${BACKEND_IMAGE:-ghcr.io/${GHCR_OWNER:?set GHCR_OWNER}/webjuanma-api:${TAG:-latest}}
     build:
       context: ./backend
-    ports:
-      - "8080:8080"
+    restart: unless-stopped
     env_file:
-      - ./backend/.env
+      - ${BACKEND_ENV_FILE:-./backend/.env}
     environment:
-      - DATABASE_URL=sqlite:///app/data/webjuanma.db
+      DATABASE_URL: sqlite:///app/data/webjuanma.db
+      RUST_LOG: webjuanma_api=info,tower_http=info,sqlx=warn
+      CORS_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:3000}
     volumes:
-      - webjuanma-data:/app/data
-    depends_on: []
+      - ${DATA_DIR:-./data}:/app/data
+    networks:
+      - webjuanma-net
+    expose:
+      - "8080"
+    # No `ports:` — backend is only reachable from the internal network.
 
-volumes:
-  webjuanma-data:
+  frontend:
+    image: ${FRONTEND_IMAGE:-ghcr.io/${GHCR_OWNER:?set GHCR_OWNER}/webjuanma-web:${TAG:-latest}}
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_INTERNAL_URL: http://backend:8080
+      NODE_ENV: production
+    depends_on:
+      - backend
+    networks:
+      - webjuanma-net
+    expose:
+      - "3000"
+    # No `ports:` — cloudflared reaches `frontend:3000` via the internal
+    # Docker network. Nothing on the host needs to listen on 3000.
+    # To debug from the host, use:  docker compose exec frontend wget -qO- http://localhost:3000
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARED_TOKEN:?set CLOUDFLARED_TOKEN}
+    networks:
+      - webjuanma-net
+    depends_on:
+      - frontend
+    profiles:
+      - tunnel
+
+networks:
+  webjuanma-net:
+    driver: bridge

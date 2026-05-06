@@ -35,6 +35,9 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+# But keep example files committed
+!compose.env.example
+!**/.env.example
 
 # Operating System files
 .DS_Store

@@ -1,0 +1,17 @@
+target
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+.env
+.env.*
+*.db
+*.db-shm
+*.db-wal
+.sqlx
+*.log
+.vscode
+.idea
+.DS_Store
+Thumbs.db

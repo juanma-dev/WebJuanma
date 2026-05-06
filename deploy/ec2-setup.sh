@@ -1,129 +1,95 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ============================================================
-# WebJuanma — EC2 Setup Script (t3.nano / Amazon Linux 2023)
-# Run as root: sudo bash ec2-setup.sh
+# WebJuanma EC2 bootstrap (Amazon Linux 2023, t3.nano or larger)
+#
+# Idempotent: safe to re-run.
+#
+# Usage (as root):
+#   sudo bash ec2-setup.sh
 # ============================================================
-
 set -euo pipefail
 
-DOMAIN="webjuanma.com"
-EMAIL="websjuanma@gmail.com"
-APP_DIR="/var/www/webjuanma.com"
-BACKEND_DIR="/opt/webjuanma-api"
+USER_NAME=${USER_NAME:-ec2-user}
+APP_DIR=/opt/webjuanma
+DATA_DIR=/var/lib/webjuanma/data
+ENV_DIR=/etc/webjuanma
+COMPOSE_VERSION=v2.32.4
 
-echo "=========================================="
-echo "  WebJuanma EC2 Setup"
-echo "=========================================="
+echo "==> System update"
+dnf -y update
 
-# 1. System updates
-echo "📦 Updating system..."
-dnf update -y
-dnf install -y nginx certbot python3-certbot-nginx git unzip
+echo "==> Installing Docker"
+dnf install -y docker
+systemctl enable --now docker
+usermod -aG docker "$USER_NAME"
 
-# 2. Create directories
-echo "📂 Creating directories..."
-mkdir -p "$APP_DIR/frontend"
-mkdir -p "$BACKEND_DIR"
+echo "==> Installing Docker Compose v2 plugin"
+DOCKER_CONFIG=/usr/local/lib/docker
+mkdir -p "$DOCKER_CONFIG/cli-plugins"
+ARCH=$(uname -m)
+case "$ARCH" in
+    x86_64)  COMPOSE_ARCH=x86_64 ;;
+    aarch64) COMPOSE_ARCH=aarch64 ;;
+    *) echo "Unsupported arch: $ARCH"; exit 1 ;;
+esac
+curl -fsSL "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-${COMPOSE_ARCH}" \
+    -o "$DOCKER_CONFIG/cli-plugins/docker-compose"
+chmod +x "$DOCKER_CONFIG/cli-plugins/docker-compose"
 
-# 3. Setup Nginx
-echo "🔧 Configuring Nginx..."
-cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup 2>/dev/null || true
+echo "==> Creating directories"
+install -d -o "$USER_NAME" -g "$USER_NAME" -m 755 "$APP_DIR"
+install -d -o 1000        -g 1000        -m 755 "$DATA_DIR"
+install -d -o root        -g root        -m 700 "$ENV_DIR"
 
-# Copy the site config
-cat > /etc/nginx/conf.d/webjuanma.conf << 'NGINX_CONF'
-server {
-    listen 80;
-    server_name webjuanma.com www.webjuanma.com;
-
-    # Let Certbot handle the redirect after SSL is set up
-    root /var/www/webjuanma.com/frontend;
-    index index.html;
-
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-
-    # Gzip
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_types text/plain text/css application/json application/javascript text/xml application/xml text/javascript image/svg+xml;
-
-    # Static assets
-    location /_next/static/ {
-        expires 365d;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # API proxy
-    location /api/ {
-        proxy_pass http://127.0.0.1:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    # SPA fallback
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
+echo "==> Installing log rotation for the daemon"
+cat > /etc/docker/daemon.json <<'JSON'
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
 }
-NGINX_CONF
+JSON
+systemctl restart docker
 
-# Test and start Nginx
-nginx -t
-systemctl enable nginx
-systemctl start nginx
+cat <<'EOF'
 
-# 4. SSL with Certbot
-echo "🔒 Setting up SSL..."
-echo "⚠️  Make sure DNS A record for $DOMAIN points to this server's IP first!"
-echo "    Then run: sudo certbot --nginx -d $DOMAIN -d www.$DOMAIN --email $EMAIL --agree-tos --no-eff-email"
-echo ""
+============================================================
+  Setup complete. Manual steps that follow:
+============================================================
 
-# 5. Backend systemd service
-echo "⚙️ Creating backend service..."
-cat > /etc/systemd/system/webjuanma-api.service << EOF
-[Unit]
-Description=WebJuanma API (Rust Axum)
-After=network.target
+ 1) Backend secrets — never enter the image:
+        sudo install -m 600 /dev/null /etc/webjuanma/backend.env
+        sudoedit /etc/webjuanma/backend.env
+    Required keys:
+        SMTP_HOST=smtp.gmail.com
+        SMTP_PORT=587
+        SMTP_USER=...@gmail.com
+        SMTP_PASS=...               # Gmail App Password
+        CONTACT_TO_EMAIL=...
 
-[Service]
-Type=simple
-User=ec2-user
-WorkingDirectory=$BACKEND_DIR
-ExecStart=$BACKEND_DIR/webjuanma-api
-Restart=always
-RestartSec=5
-Environment=RUST_LOG=webjuanma_api=info,tower_http=info
-EnvironmentFile=$BACKEND_DIR/.env
+ 2) Cloudflare Tunnel — go to:
+        https://one.dash.cloudflare.com/  → Networks → Tunnels → Create
+    Pick "Docker", copy the long token from the suggested command,
+    keep it for step 4. In the same wizard add a public hostname:
+        webjuanma.com  →  HTTP  →  frontend:3000
 
-# Resource limits (optimized for t3.nano)
-MemoryMax=64M
-CPUQuota=50%
+ 3) Compose stack:
+        sudo cp /path/to/repo/docker-compose.yml         /opt/webjuanma/
+        sudo cp /path/to/repo/compose.env.example        /opt/webjuanma/.env
+        sudo cp /path/to/repo/deploy/deploy.sh           /opt/webjuanma/
+        sudo chmod +x /opt/webjuanma/deploy.sh
+        sudoedit /opt/webjuanma/.env       # fill in GHCR_OWNER, CLOUDFLARED_TOKEN, etc.
 
-[Install]
-WantedBy=multi-user.target
+ 4) Login to ghcr.io (use a GitHub PAT with read:packages):
+        echo "<PAT>" | docker login ghcr.io -u <github-user> --password-stdin
+
+ 5) Pull and bring it up:
+        cd /opt/webjuanma
+        bash deploy.sh
+
+ 6) Tail logs:
+        docker compose logs -f
+============================================================
 EOF
-
-systemctl daemon-reload
-systemctl enable webjuanma-api
-
-# 6. Firewall
-echo "🔥 Configuring firewall..."
-# AWS Security Group should allow: 22 (SSH), 80 (HTTP), 443 (HTTPS)
-
-echo ""
-echo "=========================================="
-echo "  ✅ Setup Complete!"
-echo "=========================================="
-echo ""
-echo "Next steps:"
-echo "  1. Upload frontend build:    scp -r out/* ec2-user@IP:$APP_DIR/frontend/"
-echo "  2. Upload backend binary:    scp target/release/webjuanma-api ec2-user@IP:$BACKEND_DIR/"
-echo "  3. Upload backend .env:      scp .env ec2-user@IP:$BACKEND_DIR/"
-echo "  4. Start backend:            sudo systemctl start webjuanma-api"
-echo "  5. Point DNS A record to this IP"
-echo "  6. Setup SSL:                sudo certbot --nginx -d $DOMAIN -d www.$DOMAIN"
-echo ""
